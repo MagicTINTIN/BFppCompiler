@@ -47,7 +47,7 @@ std::string bfppFunction::toStr()
 
 void bfppFunction::addOB()
 {
-    content += "while (memory[cursor] > 0)\n{\n";
+    content += tabGen(height) + "while (memory[cursor] > 0)\n{\n";
     height++;
 }
 
@@ -55,8 +55,8 @@ bool bfppFunction::addCB()
 {
     if (height > 1)
     {
-        content += "}\n";
         height--;
+        content += tabGen(height) + "}\n";
         return false;
     }
     return true;
@@ -64,32 +64,34 @@ bool bfppFunction::addCB()
 
 void bfppFunction::addPlus()
 {
-    content += "\n";
+    content += tabGen(height) + "memory[cursor]++;\n";
 }
 
 void bfppFunction::addMinus()
 {
-    content += "\n";
+    content += tabGen(height) + "memory[cursor]--;\n";
 }
 
 void bfppFunction::addLeft()
 {
-    content += "\n";
+    content += tabGen(height) + "if (moveLeft(cursor)) {\n";
+    content += tabGen(height+1) + "std::cout << 'FATAL ERROR: Cursor can not go before position 0!\\n';\n";
+    content += tabGen(height) + "}\n";
 }
 
 void bfppFunction::addRight()
 {
-    content += "\n";
+    content += tabGen(height) + "moveRight(memory, cursor);\n";
 }
 
 void bfppFunction::addCin()
 {
-    content += "\n";
+    content += tabGen(height) + "\n";
 }
 
 void bfppFunction::addCout()
 {
-    content += "\n";
+    content += tabGen(height) + "\n";
 }
 
 

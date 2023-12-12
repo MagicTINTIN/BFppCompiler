@@ -14,6 +14,15 @@ std::string genBaseFile()
     rtn += "#include <iostream>\n";
     rtn += "#include <fstream>\n";
     rtn += "#include <stdio.h>\n\n";
+
+    rtn += "bool moveLeft(int &position)\n{\n";
+    rtn += TAB + "if (position > 0) {position--; return false;}\n";
+    rtn += TAB + "return true;\n";
+    rtn += "}\n";
+    rtn += "void moveRight(std::vector<uchar> &mem, int &position)\n{\n";
+    rtn += TAB + "position--;\n";
+    rtn += TAB + "if (position == mem.size) mem.emplace_back(0);\n";
+    rtn += "}\n";
     return rtn;
 }
 
