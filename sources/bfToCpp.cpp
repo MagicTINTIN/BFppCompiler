@@ -57,7 +57,7 @@ std::string bfToCpp::toStr()
         }
         else
         {
-            std::cout << "Impossible to compile: the number of '[' doesn't march the number of ']'!\n";
+            std::cerr << "Compilation failed: the number of '[' doesn't march the number of ']'!\n";
             return "-1";
         }
     }
