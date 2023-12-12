@@ -38,7 +38,7 @@ int getArguments(std::string const &version, std::vector<std::string> args, std:
         else if (args[i] == "--help" || args[i] == "-h")
         {
             std::cout << "bfpp is a compiler for Brainfuck++" << std::endl
-                      << "usage: bfpp filetocompile.bf [options]" << std::endl
+                      << "usage: bfpp filetocompile.b [options]" << std::endl
                       << std::endl
                       << "Available options" << std::endl
                       << " -i, --intermediate   Keep intermediate cpp file" << std::endl
@@ -51,14 +51,14 @@ int getArguments(std::string const &version, std::vector<std::string> args, std:
             if (outputfile == "")
             {
                 outputfile = inputfile;
-                replaceFirst(outputfile, ".bf", "");
+                replaceFirst(outputfile, ".b", "");
                 intermediatefile = outputfile;
                 outputfile += ".o";
                 intermediatefile += ".o";
             }
 
             intermediatefile = inputfile;
-            replaceFirst(intermediatefile, ".bf", "");
+            replaceFirst(intermediatefile, ".b", "");
             intermediatefile += ".tmp.cpp";
 
         }

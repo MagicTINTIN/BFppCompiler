@@ -45,7 +45,7 @@ build/bfpp --help
 
 For instance, you can do:
 ```bash
-build/bfpp examples/hello.bf
+build/bfpp examples/hello.b
 ```
 Now you should be able to do
 ```bash
