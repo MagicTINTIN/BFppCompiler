@@ -31,6 +31,9 @@ int main(int argc, char const *argv[])
     std::cout << "Converting brainfuck to cpp...\n";
     bfToCpp code(inputFile);
     std::string codeStr = code.toStr();
+    if (codeStr == "-1") {
+        return 1;
+    }
     std::cout << codeStr;
     toCpp << codeStr;
 

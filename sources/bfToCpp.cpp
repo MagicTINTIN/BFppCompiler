@@ -50,7 +50,16 @@ std::string bfToCpp::toStr()
     std::string rtn = genBaseFile();
     for (size_t i = 0; i < functions.size(); i++)
     {
-        rtn += functions[i].toStr();
+        bfppFunction fct = functions[i];
+        if (fct.validFinalHeight())
+        {
+            rtn += fct.toStr();
+        }
+        else
+        {
+            std::cout << "Impossible to compile: the number of '[' doesn't march the number of ']'!\n";
+            return "-1";
+        }
     }
     return rtn;
 }
