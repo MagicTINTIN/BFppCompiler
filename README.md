@@ -15,7 +15,7 @@ It can be considered as an extension of the original language with some more fun
 ### Classic Brainfuck
 These commands are still the same:
 - `[` Start loop if value at memory position != 0, skip to the end of loop if not.
-- `]` End the loop (go back to corresponding `[` in code), goes forward if the value at memory position equals 0
+- `]` End the loop (go back to corresponding `[` if the value at memory position !=, else goes forward)
 - `+` Increase the value at memory position
 - `-` Decrease the value at memory position
 - `<` Move to previous memory position

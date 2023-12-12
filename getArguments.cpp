@@ -11,7 +11,7 @@ void replaceFirst(std::string &s, std::string const &toReplace, std::string cons
     s.replace(pos, toReplace.length(), replaceWith);
 }
 
-int getArguments(std::string const &version, std::vector<std::string> args, std::string &inputfile, std::string &outputfile, bool &intermediate)
+int getArguments(std::string const &version, std::vector<std::string> args, std::string &inputfile, std::string &intermediatefile, std::string &outputfile, bool &intermediate)
 {
     for (size_t i = 0; i < args.size(); ++i)
     {
@@ -52,8 +52,14 @@ int getArguments(std::string const &version, std::vector<std::string> args, std:
             {
                 outputfile = inputfile;
                 replaceFirst(outputfile, ".bf", "");
+                intermediatefile = outputfile;
                 outputfile += ".o";
+                intermediatefile += ".o";
             }
+
+            intermediatefile = inputfile;
+            replaceFirst(intermediatefile, ".bf", "");
+            intermediatefile += ".cpp";
         }
     }
     return 0;
