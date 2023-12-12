@@ -3,11 +3,17 @@
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
+#include "bfppFunction.h"
 #include "bfToCpp.h"
 
 std::string genBaseFile()
 {
-    std::string rtn = "";
+    std::string rtn = "// File generated using Brainfuck++ Compiler\n";
+    rtn += "#include <string>\n";
+    rtn += "#include <vector>\n";
+    rtn += "#include <iostream>\n";
+    rtn += "#include <fstream>\n";
+    rtn += "#include <stdio.h>\n\n";
     return rtn;
 }
 
@@ -30,13 +36,12 @@ bfToCpp::~bfToCpp()
 {
 }
 
-/* FUNCTION GENERATOR */
-
-bfppFunction::bfppFunction(std::string functionName): name(functionName)
+std::string bfToCpp::toStr()
 {
-
-}
-
-bfppFunction::~bfppFunction()
-{
+    std::string rtn = genBaseFile();
+    for (size_t i = 0; i < functions.size(); i++)
+    {
+        rtn += functions[i].toStr();
+    }
+    return rtn;
 }

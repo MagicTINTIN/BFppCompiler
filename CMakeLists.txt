@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(SOURCES
     sources/main.cpp
     sources/getArguments.cpp
+    sources/bfppFunction.cpp
+    sources/bfToCpp.cpp
 )
 
 # Binary

@@ -4,6 +4,7 @@
 #include <fstream>
 #include <stdio.h>
 #include "getArguments.h"
+#include "bfToCpp.h"
 
 const std::string version("b0.1");
 
@@ -28,7 +29,10 @@ int main(int argc, char const *argv[])
     std::ofstream toCpp(intermediateFile);
 
     std::cout << "Converting brainfuck to cpp...\n";
-    toCpp << "";
-    
+    bfToCpp code(inputFile);
+    std::string codeStr = code.toStr();
+    std::cout << codeStr;
+    toCpp << codeStr;
+
     return 0;
 }

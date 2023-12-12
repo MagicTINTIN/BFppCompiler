@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <vector>
+#include "bfppFunction.h"
 
 class bfToCpp
 {
@@ -10,14 +12,5 @@ private:
 public:
     bfToCpp(std::string fileName);
     ~bfToCpp();
-};
-
-class bfppFunction
-{
-private:
-    std::string name;
-    std::string content;
-public:
-    bfppFunction(std::string functionName);
-    ~bfppFunction();
+    std::string toStr();
 };
