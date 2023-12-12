@@ -8,7 +8,7 @@ class bfppFunction
 private:
     std::string name;
     std::string content;
-    int height=0;
+    int height=1;
 public:
     bfppFunction(std::string functionName);
     ~bfppFunction();

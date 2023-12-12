@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <stdio.h>
 #include "bfppFunction.h"
 #include "bfToCpp.h"
@@ -13,16 +14,19 @@ std::string genBaseFile()
     rtn += "#include <vector>\n";
     rtn += "#include <iostream>\n";
     rtn += "#include <fstream>\n";
+    rtn += "#include <sstream>\n";
     rtn += "#include <stdio.h>\n\n";
 
     rtn += "bool moveLeft(int &position)\n{\n";
     rtn += TAB + "if (position > 0) {position--; return false;}\n";
     rtn += TAB + "return true;\n";
     rtn += "}\n";
-    rtn += "void moveRight(std::vector<uchar> &mem, int &position)\n{\n";
+    rtn += "void moveRight(std::vector<unsigned char> &mem, int &position)\n{\n";
     rtn += TAB + "position--;\n";
-    rtn += TAB + "if (position == mem.size) mem.emplace_back(0);\n";
-    rtn += "}\n";
+    rtn += TAB + "if (position == mem.size()) mem.emplace_back(0);\n";
+    rtn += "}\n\n";
+    rtn += "const std::string ENTER_CHAR = '\\nEnter a character > ';\n";
+    rtn += "const std::string RIGHT_ERROR_MSG = 'FATAL ERROR: Cursor can not go before position 0!\\n';\n\n";
     return rtn;
 }
 
@@ -34,11 +38,30 @@ bfToCpp::bfToCpp(std::string fileName) : inputName(fileName)
     functions.emplace_back(mainFunction);
 
     std::fstream fromBf(fileName, std::fstream::in);
-    char ch;
-    while (fromBf >> std::noskipws >> ch)
-    {
-        std::cout << ch;
+
+    if (!fromBf.is_open()) {
+        fileNotFound = true;
+        return;
     }
+
+    std::ostringstream contentStream;
+    contentStream << fromBf.rdbuf();
+    std::string fileContent = contentStream.str();
+
+    size_t fctNb = 0;
+    for (size_t charNb = 0; charNb < fileContent.size(); charNb++)
+    {
+        const char ch = fileContent[charNb];
+        if (ch == '[') functions[fctNb].addOB();
+        else if (ch == ']') functions[fctNb].addCB();
+        else if (ch == '+') functions[fctNb].addPlus();
+        else if (ch == '-') functions[fctNb].addMinus();
+        else if (ch == '<') functions[fctNb].addLeft();
+        else if (ch == '>') functions[fctNb].addRight();
+        else if (ch == '.') functions[fctNb].addCout();
+        else if (ch == ',') functions[fctNb].addCin();
+    }
+    
 }
 
 bfToCpp::~bfToCpp()
@@ -47,6 +70,11 @@ bfToCpp::~bfToCpp()
 
 std::string bfToCpp::toStr()
 {
+    if (fileNotFound) {
+        std::cerr << "Error opening Brainfuck++ file: " << inputName << std::endl;
+        return "-1";
+    }
+
     std::string rtn = genBaseFile();
     for (size_t i = 0; i < functions.size(); i++)
     {

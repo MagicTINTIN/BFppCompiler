@@ -30,11 +30,11 @@ std::string bfppFunction::toStr()
     std::string rtn = "";
     if (name == "main")
     {
-        rtn += name + "int main()\n{\n";
-        rtn += TAB + "std::vector<uchar> memory;\n";
+        rtn += "int main()\n{\n";
+        rtn += TAB + "std::vector<unsigned char> memory;\n";
         rtn += TAB + "memory.emplace_back(0);\n";
         rtn += TAB + "int cursor(0);\n";
-        rtn += TAB + "uchar temp;\n";
+        rtn += TAB + "unsigned char temp;\n";
     }
     else
     {
@@ -48,7 +48,7 @@ std::string bfppFunction::toStr()
 
 void bfppFunction::addOB()
 {
-    content += tabGen(height) + "while (memory[cursor] > 0)\n{\n";
+    content += tabGen(height) + "while (memory[cursor] > 0) {\n";
     height++;
 }
 
@@ -76,18 +76,20 @@ void bfppFunction::addMinus()
 void bfppFunction::addLeft()
 {
     content += tabGen(height) + "if (moveLeft(cursor)) {\n";
-    content += tabGen(height+1) + "std::cerr << 'FATAL ERROR: Cursor can not go before position 0!\\n';\n";
+    content += tabGen(height+1) + "std::cerr << RIGHT_ERROR_MSG;\n";
+    content += tabGen(height+1) + "return 1;\n";
     content += tabGen(height) + "}\n";
 }
 
 void bfppFunction::addRight()
 {
+    std::cout << "height: " << height << std::endl;
     content += tabGen(height) + "moveRight(memory, cursor);\n";
 }
 
 void bfppFunction::addCin()
 {
-    content += tabGen(height) + "std::cout << '\\nEnter a character > ';\n";
+    content += tabGen(height) + "std::cout << ENTER_CHAR;\n";
     content += tabGen(height) + "if (std::cin >> temp) memory[cursor] = temp;\n";
 }
 
