@@ -33,3 +33,11 @@ These commands are still the same:
 - `;(path/to/input/file.txt)` Store each character of the input file in the memory (like `,` but use file as input)
 
 # Compiler
+To build the compiler:
+```bash
+./cmakecompile --release
+```
+Then you can use the following command to get help to use the compiler:
+```bash
+build/bfpp --help
+```

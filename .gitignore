@@ -1,0 +1,5 @@
+build/*
+debug/*
+*.o
+*.out
+*.tmp.cpp

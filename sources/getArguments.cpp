@@ -13,7 +13,7 @@ void replaceFirst(std::string &s, std::string const &toReplace, std::string cons
 
 int getArguments(std::string const &version, std::vector<std::string> args, std::string &inputfile, std::string &intermediatefile, std::string &outputfile, bool &intermediate)
 {
-    for (size_t i = 0; i < args.size(); ++i)
+    for (size_t i = 1; i < args.size(); ++i)
     {
         if (args[i] == "--intermediate" || args[i] == "-i")
             intermediate = true;
@@ -59,7 +59,8 @@ int getArguments(std::string const &version, std::vector<std::string> args, std:
 
             intermediatefile = inputfile;
             replaceFirst(intermediatefile, ".bf", "");
-            intermediatefile += ".cpp";
+            intermediatefile += ".tmp.cpp";
+
         }
     }
     return 0;
