@@ -28,14 +28,24 @@ int main(int argc, char const *argv[])
 
     std::ofstream toCpp(intermediateFile);
 
-    std::cout << "Converting brainfuck to cpp...\n";
+    std::cout << "Converting brainfuck to C++...\n";
     bfToCpp code(inputFile);
     std::string codeStr = code.toStr();
     if (codeStr == "-1") {
         return 1;
     }
-    std::cout << codeStr;
+    //std::cout << codeStr;
     toCpp << codeStr;
 
+    std::cout << "Compiling C++...\n";
+    std::string compileCommand = "";
+    compileCommand += "g++ " + intermediateFile + " -o " + outputFile;
+    int result = std::system(compileCommand.c_str());
+
+    if (result == 0) {
+        std::cout << "Compilation successful." << std::endl;
+    } else {
+        std::cerr << "Compilation failed." << std::endl;
+    }
     return 0;
 }

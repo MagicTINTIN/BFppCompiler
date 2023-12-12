@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <stdio.h>
+#include <cstdlib>
 #include "bfppFunction.h"
 #include "bfToCpp.h"
 
@@ -22,11 +23,11 @@ std::string genBaseFile()
     rtn += TAB + "return true;\n";
     rtn += "}\n";
     rtn += "void moveRight(std::vector<unsigned char> &mem, int &position)\n{\n";
-    rtn += TAB + "position--;\n";
+    rtn += TAB + "position++;\n";
     rtn += TAB + "if (position == mem.size()) mem.emplace_back(0);\n";
     rtn += "}\n\n";
-    rtn += "const std::string ENTER_CHAR = '\\nEnter a character > ';\n";
-    rtn += "const std::string RIGHT_ERROR_MSG = 'FATAL ERROR: Cursor can not go before position 0!\\n';\n\n";
+    rtn += "const std::string ENTER_CHAR = \"\\nEnter a character > \";\n";
+    rtn += "const std::string RIGHT_ERROR_MSG = \"FATAL ERROR: Cursor can not go before position 0!\\n\";\n\n";
     return rtn;
 }
 

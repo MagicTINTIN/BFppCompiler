@@ -34,7 +34,7 @@ std::string bfppFunction::toStr()
         rtn += TAB + "std::vector<unsigned char> memory;\n";
         rtn += TAB + "memory.emplace_back(0);\n";
         rtn += TAB + "int cursor(0);\n";
-        rtn += TAB + "unsigned char temp;\n";
+        rtn += TAB + "std::string temp;\n";
     }
     else
     {
@@ -83,14 +83,14 @@ void bfppFunction::addLeft()
 
 void bfppFunction::addRight()
 {
-    std::cout << "height: " << height << std::endl;
     content += tabGen(height) + "moveRight(memory, cursor);\n";
 }
 
 void bfppFunction::addCin()
 {
     content += tabGen(height) + "std::cout << ENTER_CHAR;\n";
-    content += tabGen(height) + "if (std::cin >> temp) memory[cursor] = temp;\n";
+    content += tabGen(height) + "getline(std::cin, temp);\n";
+    content += tabGen(height) + "if (!temp.empty()) memory[cursor] = temp[0];\n";
 }
 
 void bfppFunction::addCout()

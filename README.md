@@ -42,3 +42,12 @@ Then you can use the following command to get help to use the compiler:
 ```bash
 build/bfpp --help
 ```
+
+For instance, you can do:
+```bash
+build/bfpp examples/hello.bf
+```
+Now you should be able to do
+```bash
+examples/hello.o
+```
