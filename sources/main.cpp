@@ -26,13 +26,9 @@ int main(int argc, char const *argv[])
     }
 
     std::ofstream toCpp(intermediateFile);
-    std::fstream fromBf(inputFile, std::fstream::in);
 
-    char ch;
-    while (fromBf >> std::noskipws >> ch)
-    {
-        std::cout << ch;
-        toCpp << ch;
-    }
+    std::cout << "Converting brainfuck to cpp...\n";
+    toCpp << "";
+    
     return 0;
 }
