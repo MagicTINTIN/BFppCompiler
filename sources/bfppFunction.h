@@ -21,6 +21,8 @@ public:
     void addRight();
     void addCin();
     void addCout();
+    void addPause();
+    void addDebug();
 
     bool validFinalHeight();
 };

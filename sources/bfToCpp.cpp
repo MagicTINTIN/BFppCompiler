@@ -18,6 +18,22 @@ std::string genBaseFile()
     rtn += "#include <sstream>\n";
     rtn += "#include <stdio.h>\n\n";
 
+    
+    rtn += "std::string memoryDelimiters(int const &memPos, int const &cursorPos)\n{\n";
+    rtn += TAB + "if (memPos == cursorPos) return \" [ \";\n";
+    rtn += TAB + "if (memPos - 1 == cursorPos) return \" ] \";\n";
+    rtn += TAB + "else return \" | \";\n";
+    rtn += "}\n";
+    rtn += "void debugMemory(std::vector<unsigned char> &mem, int &position)\n{\n";
+    rtn += TAB + "size_t i = 0;\n";
+    rtn += TAB + "for (; i < mem.size(); i++)\n",
+    rtn += TAB + "{\n";
+    rtn += TAB + TAB + "std::cout << memoryDelimiters(i, position);";
+    rtn += TAB + TAB + "std::cout << (unsigned int) mem[i];";
+    rtn += TAB + "}\n";
+    rtn += TAB + TAB + "std::cout << memoryDelimiters(i, position) << std::endl;";
+    rtn += "}\n\n";
+
     rtn += "bool moveLeft(int &position)\n{\n";
     rtn += TAB + "if (position > 0) {position--; return false;}\n";
     rtn += TAB + "return true;\n";
@@ -61,6 +77,8 @@ bfToCpp::bfToCpp(std::string fileName) : inputName(fileName)
         else if (ch == '>') functions[fctNb].addRight();
         else if (ch == '.') functions[fctNb].addCout();
         else if (ch == ',') functions[fctNb].addCin();
+        else if (ch == '!') functions[fctNb].addPause();
+        else if (ch == '?') functions[fctNb].addDebug();
     }
     
 }

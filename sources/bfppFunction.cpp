@@ -98,6 +98,15 @@ void bfppFunction::addCout()
     content += tabGen(height) + "std::cout << memory[cursor];\n";
 }
 
+void bfppFunction::addPause()
+{
+    content += tabGen(height) + "std::cin.get();\n";
+}
+
+void bfppFunction::addDebug()
+{
+    content += tabGen(height) + "debugMemory(memory,cursor);\n";
+}
 
 bool bfppFunction::validFinalHeight()
 {
