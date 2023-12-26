@@ -28,10 +28,10 @@ std::string genBaseFile()
     rtn += TAB + "size_t i = 0;\n";
     rtn += TAB + "for (; i < mem.size(); i++)\n",
     rtn += TAB + "{\n";
-    rtn += TAB + TAB + "std::cout << memoryDelimiters(i, position);";
-    rtn += TAB + TAB + "std::cout << (unsigned int) mem[i];";
+    rtn += TAB + TAB + "std::cout << memoryDelimiters(i, position);\n";
+    rtn += TAB + TAB + "std::cout << (unsigned int) mem[i];\n";
     rtn += TAB + "}\n";
-    rtn += TAB + TAB + "std::cout << memoryDelimiters(i, position) << std::endl;";
+    rtn += TAB + TAB + "std::cout << memoryDelimiters(i, position) << std::endl;\n";
     rtn += "}\n\n";
 
     rtn += "bool moveLeft(int &position)\n{\n";

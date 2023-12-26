@@ -17,7 +17,7 @@ int getArguments(std::string const &version, std::vector<std::string> args, std:
     {
         if (args[i] == "--intermediate" || args[i] == "-i")
             intermediate = true;
-        else if (args[i] == "-o")
+        else if (args[i] == "-o" || args[i] == "--output")
         {
             if (i + 1 < args.size())
             {
@@ -26,7 +26,7 @@ int getArguments(std::string const &version, std::vector<std::string> args, std:
             }
             else
             {
-                std::cout << "--o needs to be followed by the name of output file" << std::endl;
+                std::cout << "-o,--output needs to be followed by the name of output file" << std::endl;
                 return -1;
             }
         }
@@ -41,8 +41,9 @@ int getArguments(std::string const &version, std::vector<std::string> args, std:
                       << "usage: bfpp filetocompile.b [options]" << std::endl
                       << std::endl
                       << "Available options" << std::endl
-                      << " -i, --intermediate   Keep intermediate cpp file" << std::endl
-                      << " -o outputfilename    Specify the name of the output file" << std::endl;
+                      << " -h, --help                       Print this message" << std::endl
+                      << " -i, --intermediate               Keep intermediate cpp file" << std::endl
+                      << " -o, --output <outputFilename>    Specify the name of the output file" << std::endl;
             return 1;
         }
         else
