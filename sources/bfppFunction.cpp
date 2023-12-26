@@ -100,6 +100,7 @@ void bfppFunction::addCout()
 
 void bfppFunction::addPause()
 {
+    content += tabGen(height) + "std::cout << PAUSE_MSG;\n";
     content += tabGen(height) + "std::cin.get();\n";
 }
 

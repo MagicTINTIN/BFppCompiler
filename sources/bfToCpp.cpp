@@ -43,6 +43,7 @@ std::string genBaseFile()
     rtn += TAB + "if (position == mem.size()) mem.emplace_back(0);\n";
     rtn += "}\n\n";
     rtn += "const std::string ENTER_CHAR = \"\\nEnter a character > \";\n";
+    rtn += "const std::string PAUSE_MSG = \"\\nPress [ENTER] to continue...\";\n";
     rtn += "const std::string RIGHT_ERROR_MSG = \"FATAL ERROR: Cursor can not go before position 0!\\n\";\n\n";
     return rtn;
 }
