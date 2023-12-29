@@ -109,6 +109,11 @@ void bfppFunction::addDebug()
     content += tabGen(height) + "debugMemory(memory,cursor);\n";
 }
 
+void bfppFunction::addExit()
+{
+    content += tabGen(height) + "return 0;\n";
+}
+
 bool bfppFunction::validFinalHeight()
 {
     return height == 1;

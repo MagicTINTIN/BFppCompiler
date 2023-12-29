@@ -23,6 +23,7 @@ public:
     void addCout();
     void addPause();
     void addDebug();
+    void addExit();
 
     bool validFinalHeight();
 };

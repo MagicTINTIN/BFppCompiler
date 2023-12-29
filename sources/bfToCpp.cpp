@@ -80,6 +80,7 @@ bfToCpp::bfToCpp(std::string fileName) : inputName(fileName)
         else if (ch == ',') functions[fctNb].addCin();
         else if (ch == '!') functions[fctNb].addPause();
         else if (ch == '?') functions[fctNb].addDebug();
+        else if (ch == '*') functions[fctNb].addExit();
     }
     
 }
