@@ -5,6 +5,8 @@
 #include <sstream>
 #include <stdio.h>
 #include <cstdlib>
+#include <stack>
+#include <cctype>
 #include "bfppFunction.h"
 #include "bfToCpp.h"
 
@@ -66,21 +68,36 @@ bfToCpp::bfToCpp(std::string fileName) : inputName(fileName)
     contentStream << fromBf.rdbuf();
     std::string fileContent = contentStream.str();
 
-    size_t fctNb = 0;
+    size_t nbFuctions = 1;
+    std::stack<unsigned int> fctIds;
+    fctIds.push(0);
     for (size_t charNb = 0; charNb < fileContent.size(); charNb++)
     {
         const char ch = fileContent[charNb];
-        if (ch == '[') functions[fctNb].addOB();
-        else if (ch == ']') functions[fctNb].addCB();
-        else if (ch == '+') functions[fctNb].addPlus();
-        else if (ch == '-') functions[fctNb].addMinus();
-        else if (ch == '<') functions[fctNb].addLeft();
-        else if (ch == '>') functions[fctNb].addRight();
-        else if (ch == '.') functions[fctNb].addCout();
-        else if (ch == ',') functions[fctNb].addCin();
-        else if (ch == '!') functions[fctNb].addPause();
-        else if (ch == '?') functions[fctNb].addDebug();
-        else if (ch == '*') functions[fctNb].addExit();
+        if (ch == '[') functions[fctIds.top()].addOB();
+        else if (ch == ']') functions[fctIds.top()].addCB();
+        else if (ch == '+') functions[fctIds.top()].addPlus();
+        else if (ch == '-') functions[fctIds.top()].addMinus();
+        else if (ch == '<') functions[fctIds.top()].addLeft();
+        else if (ch == '>') functions[fctIds.top()].addRight();
+        else if (ch == '.') functions[fctIds.top()].addCout();
+        else if (ch == ',') functions[fctIds.top()].addCin();
+        else if (ch == '!') functions[fctIds.top()].addPause();
+        else if (ch == '?') functions[fctIds.top()].addDebug();
+        else if (ch == '*') functions[fctIds.top()].addExit();
+        else if (ch == '\\') {
+            std::string fctName;
+            charNb++;
+            while (fileContent[charNb] != '\\' && std::isalpha(fileContent[charNb]))
+            {
+                fctName += fileContent[charNb];
+                charNb++;
+            }
+            if (fileContent[charNb] != '\\') {
+                errorString = "The function \"" + fctName + "\" is not correctly defined, expected \"\\\" at the end of the name declaration";
+                return;
+            }
+        }
     }
     
 }
@@ -93,6 +110,10 @@ std::string bfToCpp::toStr()
 {
     if (fileNotFound) {
         std::cerr << "Error opening Brainfuck++ file: " << inputName << std::endl;
+        return "-1";
+    }
+    if (errorString != "") {
+        std::cerr << "Compilation failed: " << errorString << std::endl;
         return "-1";
     }
 

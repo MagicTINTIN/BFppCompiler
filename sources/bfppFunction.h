@@ -12,6 +12,7 @@ private:
 public:
     bfppFunction(std::string functionName);
     ~bfppFunction();
+    std::string getName();
     std::string toStr();
     void addOB();
     bool addCB();

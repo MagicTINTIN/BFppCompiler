@@ -10,6 +10,7 @@ private:
     std::string content;
     std::vector<bfppFunction> functions;
     bool fileNotFound = false;
+    std::string errorString="";
 public:
     bfToCpp(std::string fileName);
     ~bfToCpp();

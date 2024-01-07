@@ -25,6 +25,8 @@ bfppFunction::~bfppFunction()
 {
 }
 
+std::string bfppFunction::getName() { return name; }
+
 std::string bfppFunction::toStr()
 {
     std::string rtn = "";
@@ -38,7 +40,7 @@ std::string bfppFunction::toStr()
     }
     else
     {
-        rtn += "void " + name + "()\n{\n";
+        rtn += "void " + name + "(std::vector<unsigned char> &memory, int &cursor)\n{\n";
     }
 
     rtn += content;
