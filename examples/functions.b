@@ -1,0 +1,12 @@
+,[->+>+>+>+>+>+<<<<<<]>
+
+\increment\ {
++
+}
+
+\setToZero\ {
+    [-]
+}
+
+[.>/setToZero/?/increment/>]
+>-?

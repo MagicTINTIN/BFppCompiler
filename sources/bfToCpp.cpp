@@ -28,6 +28,7 @@ std::string genBaseFile()
     rtn += "}\n";
     rtn += "void debugMemory(std::vector<unsigned char> &mem, int &position)\n{\n";
     rtn += TAB + "size_t i = 0;\n";
+    rtn += TAB + "std::cout << std::endl;\n";
     rtn += TAB + "for (; i < mem.size(); i++)\n",
     rtn += TAB + "{\n";
     rtn += TAB + TAB + "std::cout << memoryDelimiters(i, position);\n";
@@ -88,17 +89,40 @@ bfToCpp::bfToCpp(std::string fileName) : inputName(fileName)
         else if (ch == '\\') {
             std::string fctName;
             charNb++;
-            while (fileContent[charNb] != '\\' && std::isalpha(fileContent[charNb]))
+            while (fileContent[charNb] != '\\' && std::isalpha(fileContent[charNb]) && charNb < fileContent.size())
             {
                 fctName += fileContent[charNb];
                 charNb++;
             }
-            if (fileContent[charNb] != '\\') {
+            if (charNb >= fileContent.size() || fileContent[charNb] != '\\') {
                 errorString = "The function \"" + fctName + "\" is not correctly defined, expected \"\\\" at the end of the name declaration";
+                return;
+            }
+            while (fileContent[charNb] != '{' && charNb < fileContent.size())
+            {
+                charNb++;
+            }
+            fctIds.push(nbFuctions);
+            bfppFunction newFunction(fctName + "Function");
+            functions.emplace_back(newFunction);
+            nbFuctions++;
+        }
+        else if (ch == '}') {
+            if (fctIds.size() > 1) {
+                fctIds.pop();
+            }
+            else {
+                errorString = "You cannot end the main function! Extra \"}\" found.";
                 return;
             }
         }
     }
+    if (fctIds.size() > 1)
+    {
+        errorString = "No end found for the function \"" + functions[fctIds.top()].getName() + "\". Missing \"}\" at the end of the function body";
+        return;
+    }
+    
     
 }
 

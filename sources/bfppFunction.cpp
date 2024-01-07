@@ -40,10 +40,12 @@ std::string bfppFunction::toStr()
     }
     else
     {
-        rtn += "void " + name + "(std::vector<unsigned char> &memory, int &cursor)\n{\n";
+        rtn += "int " + name + "(std::vector<unsigned char> &memory, int &cursor)\n{\n";
     }
 
     rtn += content;
+
+    rtn += TAB + "return 0;\n";
     rtn += "}\n\n";
     return rtn;
 }
