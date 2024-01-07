@@ -25,6 +25,7 @@ public:
     void addPause();
     void addDebug();
     void addExit();
+    void addFunctionCall(std::string const &functionName);
 
     bool validFinalHeight();
 };

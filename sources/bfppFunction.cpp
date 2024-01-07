@@ -118,6 +118,11 @@ void bfppFunction::addExit()
     content += tabGen(height) + "return 0;\n";
 }
 
+void bfppFunction::addFunctionCall(std::string const &functionName)
+{
+    content += tabGen(height) + functionName + "(memory,cursor);\n";
+}
+
 bool bfppFunction::validFinalHeight()
 {
     return height == 1;

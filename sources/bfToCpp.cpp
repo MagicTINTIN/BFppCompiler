@@ -20,7 +20,6 @@ std::string genBaseFile()
     rtn += "#include <sstream>\n";
     rtn += "#include <stdio.h>\n\n";
 
-    
     rtn += "std::string memoryDelimiters(int const &memPos, int const &cursorPos)\n{\n";
     rtn += TAB + "if (memPos == cursorPos) return \" [ \";\n";
     rtn += TAB + "if (memPos - 1 == cursorPos) return \" ] \";\n";
@@ -30,7 +29,7 @@ std::string genBaseFile()
     rtn += TAB + "size_t i = 0;\n";
     rtn += TAB + "std::cout << std::endl;\n";
     rtn += TAB + "for (; i < mem.size(); i++)\n",
-    rtn += TAB + "{\n";
+        rtn += TAB + "{\n";
     rtn += TAB + TAB + "std::cout << memoryDelimiters(i, position);\n";
     rtn += TAB + TAB + "std::cout << (unsigned int) mem[i];\n";
     rtn += TAB + "}\n";
@@ -60,7 +59,8 @@ bfToCpp::bfToCpp(std::string fileName) : inputName(fileName)
 
     std::fstream fromBf(fileName, std::fstream::in);
 
-    if (!fromBf.is_open()) {
+    if (!fromBf.is_open())
+    {
         fileNotFound = true;
         return;
     }
@@ -75,18 +75,30 @@ bfToCpp::bfToCpp(std::string fileName) : inputName(fileName)
     for (size_t charNb = 0; charNb < fileContent.size(); charNb++)
     {
         const char ch = fileContent[charNb];
-        if (ch == '[') functions[fctIds.top()].addOB();
-        else if (ch == ']') functions[fctIds.top()].addCB();
-        else if (ch == '+') functions[fctIds.top()].addPlus();
-        else if (ch == '-') functions[fctIds.top()].addMinus();
-        else if (ch == '<') functions[fctIds.top()].addLeft();
-        else if (ch == '>') functions[fctIds.top()].addRight();
-        else if (ch == '.') functions[fctIds.top()].addCout();
-        else if (ch == ',') functions[fctIds.top()].addCin();
-        else if (ch == '!') functions[fctIds.top()].addPause();
-        else if (ch == '?') functions[fctIds.top()].addDebug();
-        else if (ch == '*') functions[fctIds.top()].addExit();
-        else if (ch == '\\') {
+        if (ch == '[')
+            functions[fctIds.top()].addOB();
+        else if (ch == ']')
+            functions[fctIds.top()].addCB();
+        else if (ch == '+')
+            functions[fctIds.top()].addPlus();
+        else if (ch == '-')
+            functions[fctIds.top()].addMinus();
+        else if (ch == '<')
+            functions[fctIds.top()].addLeft();
+        else if (ch == '>')
+            functions[fctIds.top()].addRight();
+        else if (ch == '.')
+            functions[fctIds.top()].addCout();
+        else if (ch == ',')
+            functions[fctIds.top()].addCin();
+        else if (ch == '!')
+            functions[fctIds.top()].addPause();
+        else if (ch == '?')
+            functions[fctIds.top()].addDebug();
+        else if (ch == '*')
+            functions[fctIds.top()].addExit();
+        else if (ch == '\\')
+        {
             std::string fctName;
             charNb++;
             while (fileContent[charNb] != '\\' && std::isalpha(fileContent[charNb]) && charNb < fileContent.size())
@@ -94,36 +106,73 @@ bfToCpp::bfToCpp(std::string fileName) : inputName(fileName)
                 fctName += fileContent[charNb];
                 charNb++;
             }
-            if (charNb >= fileContent.size() || fileContent[charNb] != '\\') {
+            if (charNb >= fileContent.size() || fileContent[charNb] != '\\')
+            {
                 errorString = "The function \"" + fctName + "\" is not correctly defined, expected \"\\\" at the end of the name declaration";
                 return;
             }
-            while (fileContent[charNb] != '{' && charNb < fileContent.size())
+            while (fileContent[charNb] != '{' && fileContent[charNb] != '}' && charNb < fileContent.size())
             {
                 charNb++;
+            }
+            if (charNb >= fileContent.size() || fileContent[charNb] == '}')
+            {
+                errorString = "The function \"" + fctName + "\" is not correctly defined, missing \"{\" at the beginning of the function body";
+                return;
             }
             fctIds.push(nbFuctions);
             bfppFunction newFunction(fctName + "Function");
             functions.emplace_back(newFunction);
             nbFuctions++;
         }
-        else if (ch == '}') {
-            if (fctIds.size() > 1) {
+        else if (ch == '}')
+        {
+            if (fctIds.size() > 1)
+            {
                 fctIds.pop();
             }
-            else {
+            else
+            {
                 errorString = "You cannot end the main function! Extra \"}\" found.";
                 return;
             }
         }
+        else if (ch == '/')
+        {
+            std::string fctName;
+            charNb++;
+            while (fileContent[charNb] != '/' && std::isalpha(fileContent[charNb]) && charNb < fileContent.size())
+            {
+                fctName += fileContent[charNb];
+                charNb++;
+            }
+            if (charNb >= fileContent.size() || fileContent[charNb] != '/')
+            {
+                errorString = "The function \"" + fctName + "\" is not correctly called, expected \"/\" at the end of the name of the function";
+                return;
+            }
+            size_t fctnb = 0;
+            bool fctfound = false;
+            while (!fctfound && fctnb < functions.size())
+            {
+                if (functions[fctnb].getName() == fctName + "Function")
+                    fctfound = true;
+                fctnb++;
+            }
+            if (!fctfound)
+            {
+                errorString = "The function \"" + fctName + "\" is does not exist! Please define a function \"\\" + fctName + "\\{some code here}\" before using it.";
+                return;
+            }
+            functions[fctIds.top()].addFunctionCall(fctName + "Function");
+        }
     }
     if (fctIds.size() > 1)
     {
-        errorString = "No end found for the function \"" + functions[fctIds.top()].getName() + "\". Missing \"}\" at the end of the function body";
+        std::string fctstr = functions[fctIds.top()].getName();
+        errorString = "No end found for the function \"" + fctstr.substr(0, fctstr.length() - 8) + "\". Missing \"}\" at the end of the function.";
         return;
     }
-    
-    
 }
 
 bfToCpp::~bfToCpp()
@@ -132,17 +181,19 @@ bfToCpp::~bfToCpp()
 
 std::string bfToCpp::toStr()
 {
-    if (fileNotFound) {
+    if (fileNotFound)
+    {
         std::cerr << "Error opening Brainfuck++ file: " << inputName << std::endl;
         return "-1";
     }
-    if (errorString != "") {
+    if (errorString != "")
+    {
         std::cerr << "Compilation failed: " << errorString << std::endl;
         return "-1";
     }
 
     std::string rtn = genBaseFile();
-    for (size_t i = 0; i < functions.size(); i++)
+    for (size_t i = 1; i < functions.size(); i++)
     {
         bfppFunction fct = functions[i];
         if (fct.validFinalHeight())
@@ -151,9 +202,19 @@ std::string bfToCpp::toStr()
         }
         else
         {
-            std::cerr << "Compilation failed: the number of '[' doesn't march the number of ']'!\n";
+            std::cerr << "Compilation failed: the number of '[' doesn't march the number of ']'!\n<- Error found in " + fct.getName().substr(0,fct.getName().length() - 8) + " function.\n";
             return "-1";
         }
+    }
+    bfppFunction fct = functions[0];
+    if (fct.validFinalHeight())
+    {
+        rtn += fct.toStr();
+    }
+    else
+    {
+        std::cerr << "Compilation failed: the number of '[' doesn't march the number of ']'!\n<- Error found in global main function.\n";
+        return "-1";
     }
     return rtn;
 }

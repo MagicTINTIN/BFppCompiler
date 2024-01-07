@@ -28,10 +28,11 @@ These commands are still the same:
 - `?` Debug: print the memory array values and indicate the cursor position
 - `\functionName\ {the code goes here}` function declaration
 - `/functionName/` function call
-- `*` exit from current function
-- `#(path/to/fileNameToInclude.bf)` includes the content of an external brainfuck file at the current position of the program
-- `:(path/to/output/file.txt)` Append character to file (like `.` but outputs in file)
-- `;(path/to/input/file.txt)` Store each character of the input file in the memory (like `,` but use file as input)
+- `*` exit from current function<br>
+> The following commands are still not available<br>
+- *`#(path/to/fileNameToInclude.bf)` includes the content of an external brainfuck file at the current position of the program*
+- *`:(path/to/output/file.txt)` Append character to file (like `.` but outputs in file)*
+- *`;(path/to/input/file.txt)` Store each character of the input file in the memory (like `,` but use file as input)*
 
 # Compiler
 To build the compiler:
