@@ -10,6 +10,24 @@
 #include "bfppFunction.h"
 #include "bfToCpp.h"
 
+std::string getLineOfChar(std::string const &str, int const &pos) {
+    size_t posc = pos;
+    while (posc > 0 && str[posc] != '\n') {
+        posc--;
+    }
+    std::string line = "Char nb°" + std::to_string(pos) + "";
+    if (str[posc] != '\n')
+        line += '\n';
+    while (posc < str.size() && str[posc] != '\n')
+    {
+        line += str[posc];
+        posc++;
+    }
+    if (str[posc] != '\n')
+        line += '\n';
+    return line;
+}
+
 std::string genBaseFile()
 {
     std::string rtn = "// File generated using Brainfuck++ Compiler\n";
@@ -54,6 +72,9 @@ std::string genBaseFile()
 
 bfToCpp::bfToCpp(std::string fileName) : inputName(fileName)
 {
+    size_t posLastSlash = fileName.find_last_of('/');
+    std::string folder = posLastSlash == std::string::npos ? "" : fileName.substr(0, posLastSlash + 1);
+    
     bfppFunction mainFunction("main");
     functions.emplace_back(mainFunction);
 
@@ -108,7 +129,7 @@ bfToCpp::bfToCpp(std::string fileName) : inputName(fileName)
             }
             if (charNb >= fileContent.size() || fileContent[charNb] != '\\')
             {
-                errorString = "The function \"" + fctName + "\" is not correctly defined, expected \"\\\" at the end of the name declaration";
+                errorString = "The function \"" + fctName + "\" is not correctly defined, expected \"\\\" at the end of the name declaration.\n<- at line: " + getLineOfChar(fileContent, charNb);
                 return;
             }
             while (fileContent[charNb] != '{' && fileContent[charNb] != '}' && charNb < fileContent.size())
@@ -117,7 +138,7 @@ bfToCpp::bfToCpp(std::string fileName) : inputName(fileName)
             }
             if (charNb >= fileContent.size() || fileContent[charNb] == '}')
             {
-                errorString = "The function \"" + fctName + "\" is not correctly defined, missing \"{\" at the beginning of the function body";
+                errorString = "The function \"" + fctName + "\" is not correctly defined, missing \"{\" at the beginning of the function.\n<- at line: " + getLineOfChar(fileContent, charNb);
                 return;
             }
             fctIds.push(nbFuctions);
@@ -133,7 +154,7 @@ bfToCpp::bfToCpp(std::string fileName) : inputName(fileName)
             }
             else
             {
-                errorString = "You cannot end the main function! Extra \"}\" found.";
+                errorString = "You cannot end the main function! Extra \"}\" found.\n<- at line: " + getLineOfChar(fileContent, charNb);
                 return;
             }
         }
@@ -148,7 +169,7 @@ bfToCpp::bfToCpp(std::string fileName) : inputName(fileName)
             }
             if (charNb >= fileContent.size() || fileContent[charNb] != '/')
             {
-                errorString = "The function \"" + fctName + "\" is not correctly called, expected \"/\" at the end of the name of the function";
+                errorString = "The function \"" + fctName + "\" is not correctly called, expected \"/\" at the end of the name of the function.\n<- at line: " + getLineOfChar(fileContent, charNb);
                 return;
             }
             size_t fctnb = 0;
@@ -161,10 +182,37 @@ bfToCpp::bfToCpp(std::string fileName) : inputName(fileName)
             }
             if (!fctfound)
             {
-                errorString = "The function \"" + fctName + "\" is does not exist! Please define a function \"\\" + fctName + "\\{some code here}\" before using it.";
+                errorString = "The function \"" + fctName + "\" is does not exist! Please define a function \"\\" + fctName + "\\{some code here}\" before using it.\n<- at line: " + getLineOfChar(fileContent, charNb);
                 return;
             }
             functions[fctIds.top()].addFunctionCall(fctName + "Function");
+        }
+        else if (ch == '#' && fileContent[charNb + 1] == '{')
+        {
+            std::string fileName;
+            charNb+=2;
+            while (fileContent[charNb] != '}' && charNb < fileContent.size())
+            {
+                fileName += fileContent[charNb];
+                charNb++;
+            }
+            if (charNb >= fileContent.size() || fileContent[charNb] != '}')
+            {
+                errorString = "File include failed while including \"" + fileName + "\". expected \"}\" at the end of the name of the file.\n<- at line: " + getLineOfChar(fileContent, charNb);
+                return;
+            }
+            std::fstream newFromBf(folder + fileName, std::fstream::in);
+
+            if (!newFromBf.is_open())
+            {
+                errorString = "Impossible to include \"" + folder + fileName + "\" file content, file missing or not readable.\n<- at line: " + getLineOfChar(fileContent, charNb);
+                return;
+            }
+
+            std::ostringstream newContentStream;
+            newContentStream << newFromBf.rdbuf();
+            fileContent = fileContent.substr(0,charNb + 1) + '\n' + newContentStream.str() + '\n' + fileContent.substr(charNb + 1);
+            //std::cout << fileContent << std::endl;
         }
     }
     if (fctIds.size() > 1)
@@ -202,7 +250,7 @@ std::string bfToCpp::toStr()
         }
         else
         {
-            std::cerr << "Compilation failed: the number of '[' doesn't march the number of ']'!\n<- Error found in " + fct.getName().substr(0,fct.getName().length() - 8) + " function.\n";
+            std::cerr << "Compilation failed: the number of '[' doesn't march the number of ']'!\n<- Error found in " + fct.getName().substr(0, fct.getName().length() - 8) + " function.\n";
             return "-1";
         }
     }
