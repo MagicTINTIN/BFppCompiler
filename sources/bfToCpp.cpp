@@ -205,14 +205,13 @@ bfToCpp::bfToCpp(std::string fileName) : inputName(fileName)
 
             if (!newFromBf.is_open())
             {
-                errorString = "Impossible to include \"" + folder + fileName + "\" file content, file missing or not readable.\n<- at line: " + getLineOfChar(fileContent, charNb);
+                errorString = "Impossible to include \"" + folder + fileName + "\" file content, file is missing or not readable.\n<- at line: " + getLineOfChar(fileContent, charNb);
                 return;
             }
 
             std::ostringstream newContentStream;
             newContentStream << newFromBf.rdbuf();
             fileContent = fileContent.substr(0,charNb + 1) + '\n' + newContentStream.str() + '\n' + fileContent.substr(charNb + 1);
-            //std::cout << fileContent << std::endl;
         }
     }
     if (fctIds.size() > 1)

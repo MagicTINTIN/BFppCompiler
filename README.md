@@ -46,9 +46,9 @@ build/bfpp --help
 
 For instance, you can do:
 ```bash
-build/bfpp examples/hello.b
+build/bfpp brainfuck/hello.b
 ```
 Now you should be able to do
 ```bash
-examples/hello.o
+brainfuck/hello.o
 ```
